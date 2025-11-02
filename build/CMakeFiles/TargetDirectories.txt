@@ -1,0 +1,4 @@
+/home/gregory/lab7-part1/build/CMakeFiles/lab7lib.dir
+/home/gregory/lab7-part1/build/CMakeFiles/app.dir
+/home/gregory/lab7-part1/build/CMakeFiles/edit_cache.dir
+/home/gregory/lab7-part1/build/CMakeFiles/rebuild_cache.dir
