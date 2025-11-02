@@ -17,18 +17,3 @@ rm -rf build && cmake -B build && cmake --build build && ./build/app
 4. Сравнить точность и время выполнения различных алгоритмов.
 
 ---
-
-### ⚙️ Структура проекта
-lab7-part1/
-├── CMakeLists.txt
-├── README.md
-├── include/
-│ ├── sort.h
-│ ├── search.h
-│ └── closest_points.h
-└── src/
-├── sort.cpp
-├── search.cpp
-├── closest_points.cpp
-└── main.cpp
----
