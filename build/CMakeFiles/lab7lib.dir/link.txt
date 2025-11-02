@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblab7lib.a CMakeFiles/lab7lib.dir/src/sort.cpp.o CMakeFiles/lab7lib.dir/src/search.cpp.o CMakeFiles/lab7lib.dir/src/closest_points.cpp.o
-/usr/bin/ranlib liblab7lib.a

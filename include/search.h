@@ -1,4 +1,3 @@
-cat > include/search.h <<'EOF'
 #pragma once
 #include <vector>
 
@@ -8,4 +7,3 @@ namespace algo {
 int sequential_search_sentinel(const std::vector<int>& a, int key);
 
 } // namespace algo
-EOF

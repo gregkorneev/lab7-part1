@@ -1,4 +1,3 @@
-cat > src/sort.cpp <<'EOF'
 #include "sort.h"
 #include <algorithm>
 #include <vector>
@@ -11,7 +10,7 @@ void selection_sort(std::vector<int>& a) {
         int minj = i;
         for (int j = i + 1; j < n; ++j)
             if (a[j] < a[minj]) minj = j;
-        std::swap(a[i], a[minj]);
+        if (minj != i) std::swap(a[i], a[minj]);
     }
 }
 
@@ -51,4 +50,3 @@ void merge_sort(std::vector<int>& a) {
 }
 
 } // namespace algo
-EOF
