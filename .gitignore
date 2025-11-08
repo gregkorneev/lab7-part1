@@ -10,6 +10,7 @@ CTestTestfile.cmake
 _deps/
 /csv/
 compile_commands.json
+/plots/
 
 *.o
 *.obj
