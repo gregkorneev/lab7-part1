@@ -1,12 +1,32 @@
-CMakeLists.txt.user
+# ---- CMake / build ----
+build/
+build-*/
+cmake-build-*/
+CMakeFiles/
 CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
-compile_commands.json
+Makefile
 CTestTestfile.cmake
-_deps
-CMakeUserPresets.json
+_deps/
+
+# (если не нужен) база компиляции
+compile_commands.json
+
+# ---- бинарники и объекты ----
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+
+# ---- наши результаты ----
+*.csv
+
+# ---- IDE (по желанию) ----
+.vscode/
+.idea/

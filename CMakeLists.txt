@@ -1,23 +1,33 @@
-cmake_minimum_required(VERSION 3.10)
-project(SortingSearchingProject)
+cmake_minimum_required(VERSION 3.12)
 
+# Имя проекта (произвольное)
+project(lab7_1 LANGUAGES CXX)
+
+# Стандарт C++ и базовые флаги
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Включение директорий
-include_directories(include)
+# Если не задан тип сборки — используем Release
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
 
-# Создание исполняемого файла
+# Исполняемый файл и все исходники
 add_executable(sorting_searching_project
     src/main.cpp
     src/sorting_algorithms.cpp
     src/searching_algorithms.cpp
     src/closest_pair.cpp
+    src/results_csv.cpp
 )
 
-# Настройки компиляции
-if(MSVC)
-    target_compile_options(sorting_searching_project PRIVATE /W4)
-else()
-    target_compile_options(sorting_searching_project PRIVATE -Wall -Wextra -pedantic)
+# Подключаем заголовки из папки include
+target_include_directories(sorting_searching_project PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# (необязательно) Немного предупреждений компилятора
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  target_compile_options(sorting_searching_project PRIVATE -Wall -Wextra -Wpedantic)
 endif()
