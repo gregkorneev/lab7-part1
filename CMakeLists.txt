@@ -1,15 +1,23 @@
-cmake_minimum_required(VERSION 3.16)
-project(lab7_part1 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.10)
+project(SortingSearchingProject)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(lab7lib
-    src/sort.cpp
-    src/search.cpp
-    src/closest_points.cpp
-)
-target_include_directories(lab7lib PUBLIC include)
+# Включение директорий
+include_directories(include)
 
-add_executable(app src/main.cpp)
-target_link_libraries(app PRIVATE lab7lib)
+# Создание исполняемого файла
+add_executable(sorting_searching_project
+    src/main.cpp
+    src/sorting_algorithms.cpp
+    src/searching_algorithms.cpp
+    src/closest_pair.cpp
+)
+
+# Настройки компиляции
+if(MSVC)
+    target_compile_options(sorting_searching_project PRIVATE /W4)
+else()
+    target_compile_options(sorting_searching_project PRIVATE -Wall -Wextra -pedantic)
+endif()

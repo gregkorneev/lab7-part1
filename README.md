@@ -2,7 +2,7 @@
 ---
 ### 💻 Как собрать и запустить проект
 ```bash
-rm -rf build && cmake -B build && cmake --build build && ./build/app
+rm -rf build && cmake -B build && cmake --build build && ./build/sorting_searching_projwect
 ```
 ---
 ### 🎯 Цель работы
