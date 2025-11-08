@@ -1,8 +1,3 @@
-/*
- * CSV-вывод с поддержкой кириллицы (UTF-8 с BOM) и фиксированной точностью.
- * Авто-создание директорий для пути файла (например, "csv/sorting.csv").
- */
-
 #include "../include/results_csv.h"
 #include <fstream>
 #include <string>
@@ -103,4 +98,4 @@ void save_sorting_cases_csv(const std::string& path,
     ofs << "MergeSort;Худший;"      << mer_worst << "\n";
 }
 
-} // namespace csvout
+}

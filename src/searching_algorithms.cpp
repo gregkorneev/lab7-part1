@@ -1,6 +1,3 @@
-/*
- * Поиски: последовательный со "сторожем" и бинарный (на отсортированном массиве).
- */
 #include "../include/searching_algorithms.h"
 #include <vector>
 
@@ -33,4 +30,4 @@ int binary_search(const std::vector<int>& a, int key) {
     return -1;
 }
 
-} // namespace simple
+}

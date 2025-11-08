@@ -1,10 +1,6 @@
-/*
- * Три простые сортировки: выбором, пузырьком и слиянием.
- * Без классов, лямбд и продвинутых приёмов.
- */
 #include "../include/sorting_algorithms.h"
 #include <vector>
-#include <algorithm> // std::swap
+#include <algorithm>
 
 namespace simple {
 
@@ -65,4 +61,4 @@ void merge_sort(std::vector<int>& a) {
     merge_sort_rec(a, 0, (int)a.size(), tmp);
 }
 
-} // namespace simple
+}

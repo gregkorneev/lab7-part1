@@ -1,7 +1,3 @@
-/*
- * Ближайшая пара точек: простой перебор и базовая версия "разделяй и властвуй".
- * Без лямбд: отдельные функции-компараторы cmpX/cmpY.
- */
 #include "../include/closest_pair.h"
 #include <vector>
 #include <algorithm>
