@@ -1,3 +1,8 @@
+/*
+ * CSV-вывод с поддержкой кириллицы (UTF-8 с BOM) и фиксированной точностью.
+ * Теперь Excel открывает русские буквы правильно.
+ */
+
 #include "../include/results_csv.h"
 #include <fstream>
 #include <string>
@@ -5,15 +10,19 @@
 
 namespace csvout {
 
-// Открыть файл, записать заголовок и выставить формат чисел
+// Открыть CSV-файл в UTF-8 с BOM, записать заголовок и задать формат вывода
 static bool open_with_header(const std::string& path,
                              const std::string& header,
                              std::ofstream& ofs)
 {
-    ofs.open(path, std::ios::out);
+    ofs.open(path, std::ios::out | std::ios::binary);
     if (!ofs.is_open()) return false;
 
-    // Числа всегда печатаем как fixed с 9 знаками
+    // Добавляем BOM для Excel
+    const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
+    ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
+
+    // Настройка чисел: фиксированный формат, 9 знаков после запятой
     ofs.setf(std::ios::fixed);
     ofs << std::setprecision(9);
 
@@ -21,7 +30,7 @@ static bool open_with_header(const std::string& path,
     return true;
 }
 
-// sorting.csv: method;time_ms;equal_to_selection
+// ---- sorting.csv ----
 void save_sorting_csv(const std::string& path,
                       double ms_selection,
                       double ms_bubble,
@@ -32,12 +41,12 @@ void save_sorting_csv(const std::string& path,
     std::ofstream ofs;
     if (!open_with_header(path, "method;time_ms;equal_to_selection", ofs)) return;
 
-    ofs << "selection;" << ms_selection << ";yes\n";
-    ofs << "bubble;"    << ms_bubble    << ";" << (eq_bubble_vs_selection ? "yes" : "no") << "\n";
-    ofs << "merge;"     << ms_merge     << ";" << (eq_merge_vs_selection  ? "yes" : "no") << "\n";
+    ofs << "SelectionSort;" << ms_selection << ";yes\n";
+    ofs << "BubbleSort;"    << ms_bubble    << ";" << (eq_bubble_vs_selection ? "yes" : "no") << "\n";
+    ofs << "MergeSort;"     << ms_merge     << ";" << (eq_merge_vs_selection  ? "yes" : "no") << "\n";
 }
 
-// search.csv: key_state;result
+// ---- search.csv ----
 void save_search_csv(const std::string& path,
                      int index_found,
                      int result_absent)
@@ -49,7 +58,7 @@ void save_search_csv(const std::string& path,
     ofs << "absent;"  << result_absent << "\n";
 }
 
-// closest_pair.csv: method;i;j;distance;time_ms
+// ---- closest_pair.csv ----
 void save_closest_csv(const std::string& path,
                       const simple::CPResult& brute,
                       double ms_brute,
@@ -59,32 +68,31 @@ void save_closest_csv(const std::string& path,
     std::ofstream ofs;
     if (!open_with_header(path, "method;i;j;distance;time_ms", ofs)) return;
 
-    ofs << "bruteforce;"     << brute.i << ";" << brute.j << ";" << brute.dist << ";" << ms_brute << "\n";
-    ofs << "divide_conquer;" << divide_conquer.i << ";" << divide_conquer.j
+    ofs << "Bruteforce;"     << brute.i << ";" << brute.j << ";" << brute.dist << ";" << ms_brute << "\n";
+    ofs << "DivideConquer;"  << divide_conquer.i << ";" << divide_conquer.j
         << ";" << divide_conquer.dist << ";" << ms_dc << "\n";
 }
 
-// sorting_cases.csv: algorithm;case;time_ms  (ТЕПЕРЬ пишем миллисекунды)
+// ---- sorting_cases.csv ----
 void save_sorting_cases_csv(const std::string& path,
                             double sel_best,  double bub_best,  double mer_best,
                             double sel_avg,   double bub_avg,   double mer_avg,
                             double sel_worst, double bub_worst, double mer_worst)
 {
     std::ofstream ofs;
-    if (!open_with_header(path, "algorithm;case;time_ms", ofs)) return;
+    if (!open_with_header(path, "Algorithm;Case;Time_ms", ofs)) return;
 
-    // Все значения уже в миллисекундах — пишем как есть
-    ofs << "SelectionSort;Лучший;" << sel_best  << "\n";
-    ofs << "BubbleSort;Лучший;"    << bub_best  << "\n";
-    ofs << "MergeSort;Лучший;"     << mer_best  << "\n";
+    ofs << "SelectionSort;Лучший;"  << sel_best  << "\n";
+    ofs << "BubbleSort;Лучший;"     << bub_best  << "\n";
+    ofs << "MergeSort;Лучший;"      << mer_best  << "\n";
 
-    ofs << "SelectionSort;Средний;"<< sel_avg   << "\n";
-    ofs << "BubbleSort;Средний;"   << bub_avg   << "\n";
-    ofs << "MergeSort;Средний;"    << mer_avg   << "\n";
+    ofs << "SelectionSort;Средний;" << sel_avg   << "\n";
+    ofs << "BubbleSort;Средний;"    << bub_avg   << "\n";
+    ofs << "MergeSort;Средний;"     << mer_avg   << "\n";
 
-    ofs << "SelectionSort;Худший;" << sel_worst << "\n";
-    ofs << "BubbleSort;Худший;"    << bub_worst << "\n";
-    ofs << "MergeSort;Худший;"     << mer_worst << "\n";
+    ofs << "SelectionSort;Худший;"  << sel_worst << "\n";
+    ofs << "BubbleSort;Худший;"     << bub_worst << "\n";
+    ofs << "MergeSort;Худший;"      << mer_worst << "\n";
 }
 
-}
+} // namespace csvout
