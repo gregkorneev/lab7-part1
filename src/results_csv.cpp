@@ -1,28 +1,36 @@
 /*
  * CSV-вывод с поддержкой кириллицы (UTF-8 с BOM) и фиксированной точностью.
- * Теперь Excel открывает русские буквы правильно.
+ * Авто-создание директорий для пути файла (например, "csv/sorting.csv").
  */
 
 #include "../include/results_csv.h"
 #include <fstream>
 #include <string>
-#include <iomanip>   // std::fixed, std::setprecision
+#include <iomanip>      // std::fixed, std::setprecision
+#include <filesystem>   // std::filesystem::create_directories
 
 namespace csvout {
 
-// Открыть CSV-файл в UTF-8 с BOM, записать заголовок и задать формат вывода
+// Открыть CSV-файл в UTF-8 с BOM, создать директорию, записать заголовок и формат чисел
 static bool open_with_header(const std::string& path,
                              const std::string& header,
                              std::ofstream& ofs)
 {
+    // гарантируем существование директории (если путь содержит папку, напр. "csv/...")
+    std::filesystem::path p(path);
+    if (p.has_parent_path()) {
+        std::error_code ec;
+        std::filesystem::create_directories(p.parent_path(), ec); // игнорируем ошибку, если уже существует
+    }
+
     ofs.open(path, std::ios::out | std::ios::binary);
     if (!ofs.is_open()) return false;
 
-    // Добавляем BOM для Excel
+    // Добавляем BOM для Excel (UTF-8)
     const unsigned char bom[] = {0xEF, 0xBB, 0xBF};
     ofs.write(reinterpret_cast<const char*>(bom), sizeof(bom));
 
-    // Настройка чисел: фиксированный формат, 9 знаков после запятой
+    // Числа печатаем как fixed с 9 знаками
     ofs.setf(std::ios::fixed);
     ofs << std::setprecision(9);
 
@@ -68,12 +76,12 @@ void save_closest_csv(const std::string& path,
     std::ofstream ofs;
     if (!open_with_header(path, "method;i;j;distance;time_ms", ofs)) return;
 
-    ofs << "Bruteforce;"     << brute.i << ";" << brute.j << ";" << brute.dist << ";" << ms_brute << "\n";
-    ofs << "DivideConquer;"  << divide_conquer.i << ";" << divide_conquer.j
+    ofs << "Bruteforce;"    << brute.i << ";" << brute.j << ";" << brute.dist << ";" << ms_brute << "\n";
+    ofs << "DivideConquer;" << divide_conquer.i << ";" << divide_conquer.j
         << ";" << divide_conquer.dist << ";" << ms_dc << "\n";
 }
 
-// ---- sorting_cases.csv ----
+// ---- sorting_cases.csv ---- (в миллисекундах)
 void save_sorting_cases_csv(const std::string& path,
                             double sel_best,  double bub_best,  double mer_best,
                             double sel_avg,   double bub_avg,   double mer_avg,
