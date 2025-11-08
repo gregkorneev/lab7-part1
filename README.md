@@ -17,3 +17,12 @@ rm -rf build && cmake -B build && cmake --build build && ./build/sorting_searchi
 4. Сравнить точность и время выполнения различных алгоритмов.
 
 ---
+CSV-отчёты:
+ *   - sorting.csv           — базовые времена трёх сортировок
+ *   - sorting_cases.csv     — Лучший/Средний/Худший случаи для трёх сортировок
+ *   - sorting_sizes.csv     — серии по размерам n для трёх сортировок
+ *   - search.csv            — результаты последовательного поиска (present/absent)
+ *   - search_sizes.csv      — серии по размерам n для линейного и бинарного поиска
+ *   - closest_pair.csv      — сравнение brute force и divide&conquer
+
+ ---

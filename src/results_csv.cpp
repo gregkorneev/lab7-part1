@@ -1,5 +1,6 @@
 /*
- * Простой вывод результатов в CSV (разделитель — ';').
+ * Простейший вывод результатов в CSV (разделитель — ';').
+ * Никаких внешних библиотек: только <fstream>.
  */
 #include "../include/results_csv.h"
 #include <fstream>
@@ -7,7 +8,7 @@
 
 namespace csvout {
 
-// helper: открыть файл и записать заголовок
+// Открыть файл и записать заголовок
 static bool open_with_header(const std::string& path,
                              const std::string& header,
                              std::ofstream& ofs)
@@ -18,6 +19,7 @@ static bool open_with_header(const std::string& path,
     return true;
 }
 
+// sorting.csv: method;time_ms;equal_to_selection
 void save_sorting_csv(const std::string& path,
                       double ms_selection,
                       double ms_bubble,
@@ -33,6 +35,7 @@ void save_sorting_csv(const std::string& path,
     ofs << "merge;"     << ms_merge     << ";" << (eq_merge_vs_selection  ? "yes" : "no") << "\n";
 }
 
+// search.csv: key_state;result
 void save_search_csv(const std::string& path,
                      int index_found,
                      int result_absent)
@@ -44,6 +47,7 @@ void save_search_csv(const std::string& path,
     ofs << "absent;"  << result_absent << "\n";
 }
 
+// closest_pair.csv: method;i;j;distance;time_ms
 void save_closest_csv(const std::string& path,
                       const simple::CPResult& brute,
                       double ms_brute,
@@ -58,7 +62,7 @@ void save_closest_csv(const std::string& path,
         << ";" << divide_conquer.dist << ";" << ms_dc << "\n";
 }
 
-// CSV для «Лучший / Средний / Худший» (в секундах)
+// sorting_cases.csv: algorithm;case;time_sec
 void save_sorting_cases_csv(const std::string& path,
                             double sel_best,  double bub_best,  double mer_best,
                             double sel_avg,   double bub_avg,   double mer_avg,
@@ -80,4 +84,4 @@ void save_sorting_cases_csv(const std::string& path,
     ofs << "MergeSort;Худший;"     << mer_worst / 1000.0 << "\n";
 }
 
-}
+} // namespace csvout
