@@ -43,7 +43,7 @@ static void print_sort_status(const char* name, const std::vector<int>& v, doubl
 }
 
 int main() {
-    std::cout << "Лабораторная работа 7–1: Сортировки, поиски, ближайшая пара\n\n";
+    std::cout << "=== ЛР 7–1: Сортировки, поиски, ближайшая пара ===\n\n";
 
     // ===== Сортировки (база) =====
     const int N = 2000;
@@ -55,7 +55,7 @@ int main() {
     t0 = std::clock(); simple::bubble_sort(a_bub);    t1 = std::clock(); double ms_bub = ms_since(t0,t1);
     t0 = std::clock(); simple::merge_sort(a_mer);     t1 = std::clock(); double ms_mer = ms_since(t0,t1);
 
-    std::cout << "- СОРТИРОВКИ -\n";
+    std::cout << "-- СОРТИРОВКИ --\n";
     print_sort_status("Выбором  ", a_sel, ms_sel);
     print_sort_status("Пузырьком", a_bub, ms_bub);
     print_sort_status("Слиянием ", a_mer, ms_mer);
@@ -77,13 +77,13 @@ int main() {
     std::vector<int> base_sorted = base; simple::merge_sort(base_sorted);
     int pos_bin_ok = binary_search_basic(base_sorted, key_present);
 
-    std::cout << "- ПОИСК -\n";
+    std::cout << "-- ПОИСК --\n";
     std::cout << "Последовательный: есть=" << pos_seq_ok << ", нет=" << pos_seq_miss << "\n";
     std::cout << "Бинарный (на отсорт.) : есть=" << pos_bin_ok << "\n\n";
 
     csvout::save_search_csv("csv/search.csv", pos_seq_ok, pos_seq_miss);
 
-    // ===== Ближайшая пара =====
+    // ===== Ближайшая пара (один запуск) =====
     const int M = 2000;
     std::vector<simple::Point> pts = make_points(M, 123);
 
@@ -92,9 +92,11 @@ int main() {
     t0 = std::clock(); simple::CPResult dc = simple::closest_pair_divide_conquer(pts); t1 = std::clock();
     double ms_dc = ms_since(t0,t1);
 
-    std::cout << "- БЛИЖАЙШАЯ ПАРА -\n";
+    std::cout << "-- БЛИЖАЙШАЯ ПАРА --\n";
     std::cout << "Перебор: i=" << bf.i << " j=" << bf.j << " dist=" << bf.dist << " t=" << ms_bf << " мс\n";
     std::cout << "D&C   : i=" << dc.i << " j=" << dc.j << " dist=" << dc.dist << " t=" << ms_dc << " мс\n";
+    std::cout << "Совпадение расстояний (1e-9): "
+              << (std::fabs(bf.dist - dc.dist) < 1e-9 ? "да" : "нет") << "\n\n";
 
     csvout::save_closest_csv("csv/closest_pair.csv", bf, ms_bf, dc, ms_dc);
 
@@ -125,10 +127,9 @@ int main() {
         t_sel_avg,   t_bub_avg,   t_mer_avg,
         t_sel_worst, t_bub_worst, t_mer_worst);
 
-    // ===== Серии по размерам (для графиков) =====
+    // ===== Серии по размерам (для графиков по сортировкам/поиску) =====
     {
         std::ofstream ofs("csv/sorting_sizes.csv", std::ios::out | std::ios::binary);
-        // BOM
         const unsigned char bom[] = {0xEF,0xBB,0xBF}; ofs.write(reinterpret_cast<const char*>(bom),3);
         ofs.setf(std::ios::fixed); ofs << std::setprecision(9);
         ofs << "n;method;time_ms\n";
@@ -163,7 +164,26 @@ int main() {
         }
     }
 
-    std::cout << "CSV в папке ./csv: sorting.csv, sorting_cases.csv, sorting_sizes.csv, "
-                 "search.csv, search_sizes.csv, closest_pair.csv\n";
+    {
+        std::ofstream ofs("csv/closest_sizes.csv", std::ios::out | std::ios::binary);
+        const unsigned char bom[] = {0xEF,0xBB,0xBF}; ofs.write(reinterpret_cast<const char*>(bom),3);
+        ofs.setf(std::ios::fixed); ofs << std::setprecision(9);
+        ofs << "n;method;time_ms\n";
+
+        const int sizes[] = {10, 50, 100, 500, 1000};
+        for (int i = 0; i < 5; ++i) {
+            int n = sizes[i];
+            std::vector<simple::Point> p = make_points(n, 1000 + n);
+
+            t0 = std::clock(); (void)simple::closest_pair_bruteforce(p);     t1 = std::clock();
+            ofs << n << ";bruteforce;"    << ms_since(t0,t1) << "\n";
+
+            t0 = std::clock(); (void)simple::closest_pair_divide_conquer(p); t1 = std::clock();
+            ofs << n << ";divide_conquer;"<< ms_since(t0,t1) << "\n";
+        }
+    }
+
+    std::cout << "CSV в ./csv: sorting.csv, sorting_cases.csv, sorting_sizes.csv, "
+                 "search.csv, search_sizes.csv, closest_pair.csv, closest_sizes.csv\n";
     return 0;
 }
