@@ -1,4 +1,3 @@
-# ---- CMake / build ----
 build/
 build-*/
 cmake-build-*/
@@ -10,10 +9,8 @@ Makefile
 CTestTestfile.cmake
 _deps/
 
-# (если не нужен) база компиляции
 compile_commands.json
 
-# ---- бинарники и объекты ----
 *.o
 *.obj
 *.a
@@ -23,8 +20,6 @@ compile_commands.json
 *.dylib
 *.exe
 *.out
-
-# ---- наши результаты ----
 *.csv
 
 # ---- IDE (по желанию) ----
