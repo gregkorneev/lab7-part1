@@ -214,6 +214,6 @@ int main() {
 
     std::cout << "CSV готовы: sorting.csv, sorting_cases.csv, sorting_sizes.csv,\n"
                  "           search.csv, search_sizes.csv, closest_pair.csv\n";
-    std::cout << "=== Готово ===\n";
+    std::cout << "Готово\n";
     return 0;
 }
