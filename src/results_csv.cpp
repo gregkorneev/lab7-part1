@@ -1,20 +1,22 @@
-/*
- * Простейший вывод результатов в CSV (разделитель — ';').
- * Никаких внешних библиотек: только <fstream>.
- */
 #include "../include/results_csv.h"
 #include <fstream>
 #include <string>
+#include <iomanip>   // std::fixed, std::setprecision
 
 namespace csvout {
 
-// Открыть файл и записать заголовок
+// Открыть файл, записать заголовок и выставить формат чисел
 static bool open_with_header(const std::string& path,
                              const std::string& header,
                              std::ofstream& ofs)
 {
     ofs.open(path, std::ios::out);
     if (!ofs.is_open()) return false;
+
+    // Числа всегда печатаем как fixed с 9 знаками
+    ofs.setf(std::ios::fixed);
+    ofs << std::setprecision(9);
+
     ofs << header << "\n";
     return true;
 }
@@ -62,26 +64,27 @@ void save_closest_csv(const std::string& path,
         << ";" << divide_conquer.dist << ";" << ms_dc << "\n";
 }
 
-// sorting_cases.csv: algorithm;case;time_sec
+// sorting_cases.csv: algorithm;case;time_ms  (ТЕПЕРЬ пишем миллисекунды)
 void save_sorting_cases_csv(const std::string& path,
                             double sel_best,  double bub_best,  double mer_best,
                             double sel_avg,   double bub_avg,   double mer_avg,
                             double sel_worst, double bub_worst, double mer_worst)
 {
     std::ofstream ofs;
-    if (!open_with_header(path, "algorithm;case;time_sec", ofs)) return;
+    if (!open_with_header(path, "algorithm;case;time_ms", ofs)) return;
 
-    ofs << "SelectionSort;Лучший;" << sel_best  / 1000.0 << "\n";
-    ofs << "BubbleSort;Лучший;"    << bub_best  / 1000.0 << "\n";
-    ofs << "MergeSort;Лучший;"     << mer_best  / 1000.0 << "\n";
+    // Все значения уже в миллисекундах — пишем как есть
+    ofs << "SelectionSort;Лучший;" << sel_best  << "\n";
+    ofs << "BubbleSort;Лучший;"    << bub_best  << "\n";
+    ofs << "MergeSort;Лучший;"     << mer_best  << "\n";
 
-    ofs << "SelectionSort;Средний;"<< sel_avg   / 1000.0 << "\n";
-    ofs << "BubbleSort;Средний;"   << bub_avg   / 1000.0 << "\n";
-    ofs << "MergeSort;Средний;"    << mer_avg   / 1000.0 << "\n";
+    ofs << "SelectionSort;Средний;"<< sel_avg   << "\n";
+    ofs << "BubbleSort;Средний;"   << bub_avg   << "\n";
+    ofs << "MergeSort;Средний;"    << mer_avg   << "\n";
 
-    ofs << "SelectionSort;Худший;" << sel_worst / 1000.0 << "\n";
-    ofs << "BubbleSort;Худший;"    << bub_worst / 1000.0 << "\n";
-    ofs << "MergeSort;Худший;"     << mer_worst / 1000.0 << "\n";
+    ofs << "SelectionSort;Худший;" << sel_worst << "\n";
+    ofs << "BubbleSort;Худший;"    << bub_worst << "\n";
+    ofs << "MergeSort;Худший;"     << mer_worst << "\n";
 }
 
-} // namespace csvout
+}
