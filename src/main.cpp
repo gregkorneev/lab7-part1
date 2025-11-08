@@ -1,16 +1,11 @@
-/*
- * ЛР 7–1: Сортировки, поиск и ближайшая пара точек.
- * Все CSV складываются в подпапку "csv/" (создаётся автоматически).
- */
-
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
 #include <cmath>
-#include <fstream>   // <-- нужно для std::ofstream
-#include <iomanip>   // <-- нужно для std::setprecision
+#include <fstream>
+#include <iomanip>
 
 #include "../include/sorting_algorithms.h"
 #include "../include/searching_algorithms.h"
@@ -48,7 +43,7 @@ static void print_sort_status(const char* name, const std::vector<int>& v, doubl
 }
 
 int main() {
-    std::cout << "=== ЛР 7–1: Сортировки, поиски, ближайшая пара ===\n\n";
+    std::cout << "Лабораторная работа 7–1: Сортировки, поиски, ближайшая пара\n\n";
 
     // ===== Сортировки (база) =====
     const int N = 2000;
@@ -60,7 +55,7 @@ int main() {
     t0 = std::clock(); simple::bubble_sort(a_bub);    t1 = std::clock(); double ms_bub = ms_since(t0,t1);
     t0 = std::clock(); simple::merge_sort(a_mer);     t1 = std::clock(); double ms_mer = ms_since(t0,t1);
 
-    std::cout << "-- СОРТИРОВКИ --\n";
+    std::cout << "- СОРТИРОВКИ -\n";
     print_sort_status("Выбором  ", a_sel, ms_sel);
     print_sort_status("Пузырьком", a_bub, ms_bub);
     print_sort_status("Слиянием ", a_mer, ms_mer);
@@ -82,7 +77,7 @@ int main() {
     std::vector<int> base_sorted = base; simple::merge_sort(base_sorted);
     int pos_bin_ok = binary_search_basic(base_sorted, key_present);
 
-    std::cout << "-- ПОИСК --\n";
+    std::cout << "- ПОИСК -\n";
     std::cout << "Последовательный: есть=" << pos_seq_ok << ", нет=" << pos_seq_miss << "\n";
     std::cout << "Бинарный (на отсорт.) : есть=" << pos_bin_ok << "\n\n";
 
@@ -97,11 +92,9 @@ int main() {
     t0 = std::clock(); simple::CPResult dc = simple::closest_pair_divide_conquer(pts); t1 = std::clock();
     double ms_dc = ms_since(t0,t1);
 
-    std::cout << "-- БЛИЖАЙШАЯ ПАРА --\n";
+    std::cout << "- БЛИЖАЙШАЯ ПАРА -\n";
     std::cout << "Перебор: i=" << bf.i << " j=" << bf.j << " dist=" << bf.dist << " t=" << ms_bf << " мс\n";
     std::cout << "D&C   : i=" << dc.i << " j=" << dc.j << " dist=" << dc.dist << " t=" << ms_dc << " мс\n";
-    std::cout << "Совпадение расстояний (1e-9): "
-              << (std::fabs(bf.dist - dc.dist) < 1e-9 ? "да" : "нет") << "\n\n";
 
     csvout::save_closest_csv("csv/closest_pair.csv", bf, ms_bf, dc, ms_dc);
 
