@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
 
-# Имя проекта (произвольное)
 project(lab7_1 LANGUAGES CXX)
 
 # Стандарт C++ и базовые флаги
@@ -8,7 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Если не задан тип сборки — используем Release
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -22,12 +20,9 @@ add_executable(sorting_searching_project
     src/results_csv.cpp
 )
 
-# Подключаем заголовки из папки include
 target_include_directories(sorting_searching_project PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
-# (необязательно) Немного предупреждений компилятора
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(sorting_searching_project PRIVATE -Wall -Wextra -Wpedantic)
 endif()
